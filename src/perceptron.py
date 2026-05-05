@@ -51,6 +51,8 @@ class Perceptron:
                     self.weights[i] += y * x
                     self.bias += y
 
+    # Simple test function to see how well perceptron
+    # linearly separates points
     def test(self, point: npt.NDArray) -> list[int]:
         SUCCESS, FAILURE = 1, -1
         results: list[int] = []

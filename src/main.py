@@ -2,6 +2,7 @@ import display as d
 from point2d import Point2D
 from perceptron import Perceptron
 
+# Hyperparameter, can tune this to try and get better results
 MAX_ITER = 1000
 
 if __name__ == "__main__":
