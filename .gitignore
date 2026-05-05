@@ -1,2 +1,3 @@
 # Ignore precompiled python files
 **/*.pyc
+__pycache__/
