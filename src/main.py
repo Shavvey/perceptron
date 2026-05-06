@@ -25,6 +25,7 @@ def test_multilayer_perceptron_iris():
     # Return number of feature
     features = iris_data['species'].unique().tolist()
     num_features = len(features)
+    print(iris_data[:-1])
     # Construct layers based on number of features
     hidden_layer = Layer([Perceptron(6) for _ in range(num_features)])
     # Create network with one single hidden layer
