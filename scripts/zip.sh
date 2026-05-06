@@ -1,7 +1,5 @@
 #!/bin/bash
 
-ENTRY_POINT="."
-
 echo "Enter the name of the final zip"
 read name
 zipify() {
