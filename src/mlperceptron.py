@@ -2,6 +2,7 @@ from perceptron import Perceptron
 import pandas as pd
 import numpy.typing as npt
 import math as m
+from collections import defaultdict
 
 
 class Layer:
@@ -16,6 +17,7 @@ class Layer:
 def softmax(outputs: list[float]) -> list[float]:
     sum: float = 0
     for out in outputs:
+        print(m.exp(out))
         sum += m.exp(out)
     return [m.exp(out) / sum for out in outputs]
 
@@ -30,28 +32,27 @@ class MultiLayerPerceptron:
         self.hidden_layer = layer
 
     def train(self, data: pd.DataFrame, features: list[str], feature_col: str):
-        for i, neuron in enumerate(self.hidden_layer.neurons):
+        for i, feature in enumerate(features):
             dataset = data.copy()
-            dataset[dataset[feature_col] == features[i]] = 1
-            dataset[dataset[feature_col] != features[i]] = -1
-            neuron.train(dataset.to_numpy())
+            mapping = defaultdict(lambda: -1, {feature: 1})
+            dataset[feature_col] = dataset[feature_col].map(mapping)
+            self.hidden_layer.neurons[i].train(dataset.to_numpy())
 
-    def test(
-        self, data: pd.DataFrame, features: list[str], feature_col: str
-    ) -> list[int]:
+    def __str__(self) -> str:
+        s = ""
+        for neuron in self.hidden_layer.neurons:
+            s += "{ " + str(neuron) + " }\n"
+        return s
+
+    def test(self, data: pd.DataFrame, idx_feature_map: dict) -> list[int]:
         preds: list[int] = []
-        for i, _ in enumerate(features):
-            dataset = data.copy()
-            dataset[dataset[feature_col] == features[i]] = 1
-            dataset[dataset[feature_col] != features[i]] = -1
-            for row in dataset.iterrows():
-                activations = []
-                for neuron in self.hidden_layer.neurons:
-                    a = neuron.bias
-                    for j, x in enumerate(row[:-1]):
-                        a += neuron.weights[j] * x
-                    activations.append(a)
-                outputs = softmax(activations)
-                max_idx = outputs.index((max(outputs)))
-                preds.append(-1) if max_idx != i else preds.append(1)
+        for _, row in data.iterrows():
+            activations = []
+            for neuron in self.hidden_layer.neurons:
+                a = neuron.bias
+                for j, x in enumerate(row[:-1]):
+                    a += neuron.weights[j] * x
+                activations.append(a)
+            max_idx = activations.index((max(activations)))
+            preds.append(-1) if max_idx != idx_feature_map[row[-1]] else preds.append(1)
         return preds
