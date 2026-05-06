@@ -19,9 +19,11 @@ def test_perceptron_train_and_display():
         p.train(df.to_numpy())
     # Print final configuration to stdout
     print(p)
+    d.display(p, df)
 
 
 def test_multilayer_perceptron_iris():
+    test_perceptron_train_and_display()
     iris_data = Point2D.csv_to_points("data/iris_data.csv")
     # Return number of feature
     classes = iris_data["species"].unique().tolist()
