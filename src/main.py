@@ -23,7 +23,6 @@ def test_perceptron_train_and_display():
 
 
 def test_multilayer_perceptron_iris():
-    test_perceptron_train_and_display()
     iris_data = Point2D.csv_to_points("data/iris_data.csv")
     # Return number of feature
     classes = iris_data["species"].unique().tolist()
@@ -44,4 +43,5 @@ def test_multilayer_perceptron_iris():
 
 
 if __name__ == "__main__":
+    test_perceptron_train_and_display()
     test_multilayer_perceptron_iris()
