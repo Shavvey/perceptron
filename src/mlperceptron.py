@@ -1,6 +1,5 @@
 from perceptron import Perceptron
 import pandas as pd
-import numpy.typing as npt
 import math as m
 from collections import defaultdict
 
@@ -44,8 +43,8 @@ class MultiLayerPerceptron:
             s += "{ " + str(neuron) + " }\n"
         return s
 
-    def test(self, data: pd.DataFrame, idx_feature_map: dict) -> list[int]:
-        preds: list[int] = []
+    def test(self, data: pd.DataFrame, feature_idx_map: dict) -> list[str]:
+        preds: list[str] = []
         for _, row in data.iterrows():
             activations = []
             for neuron in self.hidden_layer.neurons:
@@ -54,5 +53,5 @@ class MultiLayerPerceptron:
                     a += neuron.weights[j] * x
                 activations.append(a)
             max_idx = activations.index((max(activations)))
-            preds.append(-1) if max_idx != idx_feature_map[row[-1]] else preds.append(1)
+            preds.append(feature_idx_map[max_idx])
         return preds
